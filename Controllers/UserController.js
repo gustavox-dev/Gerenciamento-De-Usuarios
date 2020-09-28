@@ -16,39 +16,57 @@ class UserController {
 
             let values = this.getValues()
 
-            
+            this.getPhoto().then(
+                content => {
 
-            this.getPhoto((content) => { // Leitura da imagem via botão 'submit'
-                values.photo = content
-                this.addLine(values) // O clique dispara a chamada do getValues e Adiciona a linha do usuário
-            }) 
+                    values.photo = content
 
+                    this.addLine(values) // O clique dispara a chamada do getValues e Adiciona a linha do usuário   
+
+                }, 
+                e => {
+
+                    console.error(e)
+
+                }
+            )
             
-        
         })
 
     }
 
-    getPhoto(callback) {
-        let fileReader = new FileReader()
+    getPhoto() {
 
-        let elements = [...this.formEl.elements].filter(item=>{
-            if (item.name === 'photo') {
-                return item // Retornará a imágem caso seja igual a 'photo'
-            }
-        })
+        return new Promise((resolve, reject) => {
+
+            let fileReader = new FileReader()
+
+            let elements = [...this.formEl.elements].filter(item=>{
+                if (item.name === 'photo') {
+                    return item // Retornará a imágem caso seja igual a 'photo'
+                }
+            })
 
         let file = elements[0].files[0] // Será selecionado apenas 1 arquivo
 
         // Callback. Quando terminar de carregar a imagem(onload), deverá executar a função.
         fileReader.onload = () => {
             
-            callback(fileReader.result)
+            resolve(fileReader.result)
             
         }
 
+        fileReader.onerror = (e) => { // Caso dê erro no arquivo
+            
+            reject(e)
+
+        }
 
         fileReader.readAsDataURL(file)
+
+        })
+
+        
 
     }
 
