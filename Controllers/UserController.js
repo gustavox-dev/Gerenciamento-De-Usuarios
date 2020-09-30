@@ -5,6 +5,15 @@ class UserController {
         this.tableEl = document.getElementById(tableId) // Linha nova
 
         this.onSubmit()
+        this.onEdit()
+    }
+
+    onEdit() { // Evento do Botão cancelar. 
+
+        document.querySelector("#box-user-update .btn-cancel").addEventListener("click", e => {
+            this.showPanelCreate()
+        })
+
     }
 
     // Sempre que o formulário for enviado o método vai ser chamado. Evento adiocionado ao botão.
@@ -152,21 +161,39 @@ class UserController {
                 <td>${(dataUser.admin ? 'Sim' : 'Não' )}</td>
                 <td>${Utils.dateFormat(dataUser.register)}</td>
                 <td>
-                <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
+                <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
                 </td>
             </tr>
             `;
 
+            tr.querySelector(".btn-edit").addEventListener("click", e => {
+                
+                console.log(JSON.parse(tr.dataset.user))
+                // Ao clicar no botão editar
+                this.showPanelUpdate()
+            })
 
             this.tableEl.appendChild(tr)
 
-            this.upDateCount()
+            this.updateCount()
 
             
         }
 
-        upDateCount(){
+        showPanelCreate() {
+            document.querySelector("#box-user-create").style.display = "block" // Mostra o create
+            document.querySelector("#box-user-update").style.display = "none" // Esconte o update
+        }
+        
+        // Ao clicar no botão editar
+        showPanelUpdate() {
+            document.querySelector("#box-user-create").style.display = "none" // Esconte o create
+            document.querySelector("#box-user-update").style.display = "block" // Mostra o update
+        }
+
+        // Ao clicar no botão cancelar
+        updateCount(){
 
             let numberUsers = 0;
             let numberAdmin = 0;
