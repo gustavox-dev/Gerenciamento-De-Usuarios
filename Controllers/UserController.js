@@ -17,7 +17,7 @@ class UserController {
     }
 
     // Sempre que o formulário for enviado o método vai ser chamado. Evento adiocionado ao botão.
-    onSubmit() {
+    onSubmit() { // Será adicionado um novo usuário
 
         this.formEl.addEventListener("submit", event => {
     
@@ -161,15 +161,34 @@ class UserController {
                 <td>${(dataUser.admin ? 'Sim' : 'Não' )}</td>
                 <td>${Utils.dateFormat(dataUser.register)}</td>
                 <td>
-                <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-                <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
+                    <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
+                    <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
                 </td>
             </tr>
             `;
 
             tr.querySelector(".btn-edit").addEventListener("click", e => {
                 
-                console.log(JSON.parse(tr.dataset.user))
+                let json = JSON.parse(tr.dataset.user)
+                let form = document.querySelector("#form-user-update")
+
+                for(let name in json) {
+
+                    let field = form.querySelector("[name = " + name.replace("_", "") + "]")
+
+                    
+
+                    if (field) {
+                        
+                        if(field.type == 'file') continue
+
+                        field.value = json[name]
+                    }
+
+                    
+
+                }
+
                 // Ao clicar no botão editar
                 this.showPanelUpdate()
             })
