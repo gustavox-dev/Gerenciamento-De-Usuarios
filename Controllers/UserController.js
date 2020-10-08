@@ -45,28 +45,19 @@ class UserController {
                         result._photo = content
                     }
 
-                    tr.dataset.user = JSON.stringify(result)
+                    let user = new User()
 
-                    tr.innerHTML = `
-            
-                        <td><img src="${result._photo}" alt="User Image" class="img-circle img-sm"></td>
-                        <td>${result._name}</td>
-                        <td>${result._email}</td>
-                        <td>${(result._admin ? 'Sim' : 'Não' )}</td>
-                        <td>${Utils.dateFormat(result._register)}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-                            <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-                        </td>
-                    `
+                    user.loadFromJSON(result)
 
-            this.addEventsTR(tr)
+                    this.getTr(user, tr)
 
-            this.updateCount()
+                    this.updateCount()
                                        
                     this.formUpdateEl.reset() // Limpa o formulário ao clicar no botão.
 
                     btn.disabled = false
+
+                    this.showPanelCreate
 
                 }, 
 
@@ -96,7 +87,18 @@ class UserController {
 
             if(!values) return false
 
-
+            tr.innerHTML = `
+            
+                        <td><img src="${result._photo}" alt="User Image" class="img-circle img-sm"></td>
+                        <td>${result._name}</td>
+                        <td>${result._email}</td>
+                        <td>${(result._admin ? 'Sim' : 'Não' )}</td>
+                        <td>${Utils.dateFormat(result._register)}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
+                            <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
+                        </td>
+                    `
 
             this.getPhoto(this.formEl).then(
 
@@ -249,15 +251,26 @@ class UserController {
 
     }
 
-        // View
+        // Adiciona uma nova linha TR a tabela
     addLine(dataUser) {
             
-            let tr = document.createElement('tr')
+        let tr = this.getTr(dataUser)
 
+        this.tableEl.appendChild(tr)
 
-            tr.dataset.user = JSON.stringify(dataUser)
+        this.updateCount()
 
-            tr.innerHTML = `
+            
+    }
+    
+    // Seleciona a TR gerada
+    getTr(dataUser, tr = null) {
+
+        if( tr === null ) tr = document.createElement('tr')
+
+        tr.dataset.user = JSON.stringify(dataUser)
+
+        tr.innerHTML = `
             <tr>
                 <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
                 <td>${dataUser.name}</td>
@@ -273,11 +286,7 @@ class UserController {
 
             this.addEventsTR(tr)
 
-            this.tableEl.appendChild(tr)
-
-            this.updateCount()
-
-            
+            return tr
     }
 
         // Eventos da tabela
