@@ -215,9 +215,9 @@ class UserController {
     getUsersStorage() {
         let users = []
 
-        if (sessionStorage.getItem("users")) {
+        if (localStorage.getItem("users")) {
 
-            users = JSON.parse(sessionStorage.getItem("users"))
+            users = JSON.parse(localStorage.getItem("users"))
 
         }
 
@@ -244,12 +244,13 @@ class UserController {
 
         users.push(data)
 
-        sessionStorage.setItem("users", JSON.stringify(users))
+        
+        localStorage.setItem("users", JSON.stringify(users))
 
     }
 
         // View
-        addLine(dataUser) {
+    addLine(dataUser) {
             
             let tr = document.createElement('tr')
 
@@ -277,10 +278,10 @@ class UserController {
             this.updateCount()
 
             
-        }
+    }
 
         // Eventos da tabela
-        addEventsTR(tr) {
+    addEventsTR(tr) {
 
             tr.querySelector(".btn-delete").addEventListener("click", e => {
 
@@ -332,21 +333,21 @@ class UserController {
                 this.showPanelUpdate()
             })
 
-        }
+    }
 
-        showPanelCreate() {
+    showPanelCreate() {
             document.querySelector("#box-user-create").style.display = "block" // Mostra o create
             document.querySelector("#box-user-update").style.display = "none" // Esconte o update
-        }
+    }
         
         // Ao clicar no botão editar
-        showPanelUpdate() {
+    showPanelUpdate() {
             document.querySelector("#box-user-create").style.display = "none" // Esconte o create
             document.querySelector("#box-user-update").style.display = "block" // Mostra o update
-        }
+    }
 
         // Ao clicar no botão cancelar
-        updateCount(){
+    updateCount(){
 
             let numberUsers = 0;
             let numberAdmin = 0;
@@ -364,5 +365,6 @@ class UserController {
             document.querySelector("#number-users").innerHTML = numberUsers
             document.querySelector("#number-users-admin").innerHTML = numberAdmin
 
-        }
     }
+    
+}
